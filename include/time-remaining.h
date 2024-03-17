@@ -1,0 +1,3 @@
+#ifndef __TIME_REMAINING
+#define __TIME_REMAINING
+#endif // __TIME_REMAINING
