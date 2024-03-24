@@ -10,6 +10,7 @@ BEGIN
   POPUP "&File"
   BEGIN
     MENUITEM "E&xit",                  ID_FILE_EXIT
+    MENUITEM "Base Directory",        ID_FILE_BASEDIR
   END
   POPUP "&Help"
   BEGIN
