@@ -54,3 +54,4 @@ clean:
 obj/AboutDialog.o: include/AboutDialog.h include/Globals.h include/Resource.h
 obj/MainWindow.o:  include/AboutDialog.h include/Globals.h include/MainWindow.h include/Resource.h
 obj/WinMain.o:     include/Globals.h include/MainWindow.h include/Resource.h
+obj/Config.o:      include/Config.h include/Globals.h
