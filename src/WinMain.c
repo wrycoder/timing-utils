@@ -95,7 +95,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
   hSubdirectoryWnd = CreateWindow(
       TEXT("LISTBOX"),
       NULL,
-      WS_CHILD | WS_VISIBLE | WS_BORDER | LBS_STANDARD,
+      WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_BORDER | LBS_NOTIFY,
       10, 10, 100, 200,
       hWnd,
       NULL,
@@ -146,7 +146,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     NULL,                              // Menu handle
     hInstance,                         // Instance handle
     NULL                               // Additional data
-);
+  );
   // Load accelerators
   hAccelerators = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_ACCELERATOR));
 

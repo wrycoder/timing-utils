@@ -36,7 +36,7 @@ LRESULT SetBaseDirectory(HKEY hKey, HWND hWnd)
     pDirSelDialog->lpVtbl->SetOptions(pDirSelDialog, dwOptions | FOS_PICKFOLDERS | FOS_FILEMUSTEXIST);
     pDirSelDialog->lpVtbl->SetOkButtonLabel(pDirSelDialog, TEXT("Select Base Folder"));
     GetCurrentDirectory((sizeof(wchar_t) * MAX_PATH), starting_directory);
-    hr = pDirSelDialog->lpVtbl->Show(pDirSelDialog, hWnd); 
+    hr = pDirSelDialog->lpVtbl->Show(pDirSelDialog, hWnd);
     if (SUCCEEDED(hr))
     {
       IShellItem* pSelectedItem = NULL;
@@ -67,3 +67,4 @@ LRESULT SetBaseDirectory(HKEY hKey, HWND hWnd)
   CoUninitialize();
   return ERROR_SUCCESS;
 }
+

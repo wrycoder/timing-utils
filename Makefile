@@ -1,5 +1,5 @@
 # Object files to create for the executable
-OBJS = obj/MainWindow.o obj/AboutDialog.o obj/Resource.o obj/WinMain.o obj/Config.o
+OBJS = obj/MainWindow.o obj/AboutDialog.o obj/Resource.o obj/WinMain.o obj/Config.o obj/Audio.o
 
 # Warnings to be raised by the C compiler
 WARNS = -Wall
@@ -11,13 +11,16 @@ EXE = tr.exe
 
 # Compiler flags. Compile ANSI build only if CHARSET=ANSI.
 ifeq (${CHARSET}, ANSI)
-  CFLAGS = -O2 -D _WIN32_IE=0x0500 -D _USER32_ -D WINVER=0x0500 ${WARNS} -Iinclude -static
+  CFLAGS = -O2 -D _WIN32_IE=0x0500 -D _USER32_ -D WINVER=0x0500 ${WARNS} \
+  -I /home/ubuntu/x86_64/include -Iinclude -Wno-incompatible-pointer-types -Wno-unused-variable
 else
-  CFLAGS = -O2 -D UNICODE -D _UNICODE -D _USER32_ -D _WIN32_IE=0x0500 -D WINVER=0x0500 ${WARNS} -Iinclude
+  CFLAGS = -O2 -D UNICODE -D _UNICODE -D _USER32_ -D _WIN32_IE=0x0500 -D WINVER=0x0500 ${WARNS} \
+  -I /home/ubuntu/x86_64/include -Iinclude -Wno-incompatible-pointer-types -Wno-unused-variable
 endif
 
 # LDFLAGS = -L /home/ubuntu/x86_64/lib -lsox -lwinmm -fopenmp -static
-LDFLAGS = -s -lcomctl32 -lole32 -luser32 -lgdi32 -luuid -Wl,--subsystem,windows -static
+LDFLAGS = -L /home/ubuntu/x86_64/lib -s -lsox -lcomctl32 -lole32 -luser32 -lgdi32 -luuid \
+  -Wl,--subsystem,windows -static -luuid -lwinmm -fopenmp
 
 .PHONY: all clean
 
