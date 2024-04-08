@@ -136,7 +136,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         subdirectoryIndex = (int)SendMessage(hSubdirectoryWnd, LB_GETCURSEL, 0, 0);
         hourIndex = (int)SendMessage(hHourWnd, LB_GETCURSEL, 0, 0);
-//        StringCchPrintf(fullPath, (sizeof(fullPath) / sizeof(TCHAR)), "%s\\%s", 
+//        StringCchPrintf(fullPath, (sizeof(fullPath) / sizeof(TCHAR)), "%s\\%s",
         load_filenames(hWnd, base_dir, days[subdirectoryIndex].directoryName, hours[hourIndex].hourName);
         selectedDay = days[subdirectoryIndex].displayString;
         selectedHour = hours[hourIndex].displayString;
