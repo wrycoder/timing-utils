@@ -37,72 +37,11 @@ void ReportError(HWND hWnd, DWORD dwErr)
 /* Window procedure for our main window */
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-  HKEY    hKey;
   BYTE    data[1024];
   DWORD   dataSize = 1024;
-  TCHAR*  base_dir;
   DWORD   dwType = REG_SZ;
-  LSTATUS regResult;
 
-  regResult = RegOpenKeyEx(HKEY_CURRENT_USER, APP_CONFIG_SUBKEY,
-                           0, KEY_READ | KEY_WRITE , &hKey);
-  if (regResult != ERROR_SUCCESS)
-  {
-    if (regResult == ERROR_FILE_NOT_FOUND)
-    {
-      /* The app has not been used yet. Set the base directory. */
-      regResult = RegCreateKeyEx(HKEY_CURRENT_USER, APP_CONFIG_SUBKEY,
-                                  0, NULL, REG_OPTION_NON_VOLATILE,
-                                  KEY_WRITE, NULL, &hKey, NULL);
-      if (regResult != ERROR_SUCCESS)
-      {
-        MessageBox(hWnd, TEXT("Unable to add app key to registry."), TEXT("Error"), MB_ICONERROR | MB_OK);
-        return 0;
-      }
-      regResult = SetBaseDirectory(hKey, hWnd);
-      if (regResult != ERROR_SUCCESS)
-      {
-        MessageBox(hWnd, TEXT("Unable to update base directory."), TEXT("Error"), MB_ICONERROR | MB_OK);
-        return 0;
-      }
-    }
-  }
-
-  regResult = RegGetValue(hKey, NULL, APP_CONFIG_BASEDIR, RRF_RT_REG_SZ, &dwType, data, &dataSize);
-  if (regResult != ERROR_SUCCESS)
-  {
-    MessageBox(hWnd, TEXT("Unable to retrieve base directory."), TEXT("Error"), MB_ICONERROR | MB_OK);
-    RegCloseKey(hKey);
-    return 0;
-  }
-
-  regResult = RegCloseKey(hKey);
-  if (regResult != ERROR_SUCCESS)
-  {
-    MessageBox(hWnd, TEXT("Unable to close registry."), TEXT("Error"), MB_ICONERROR | MB_OK);
-    return 0;
-  }
-
-  int wstrLength = MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)data, -1, NULL, 0);
-  if (wstrLength == 0)
-  {
-    MessageBox(hWnd, TEXT("Error converting byte array to wide-character string"), TEXT("Error"), MB_ICONERROR | MB_OK);
-    return 0;
-  }
-
-  base_dir = (TCHAR*)malloc(wstrLength * sizeof(TCHAR));
-  if (base_dir == NULL)
-  {
-    MessageBox(hWnd, TEXT("Memory allocation failed"), TEXT("Error"), MB_ICONERROR | MB_OK);
-    return 0;
-  }
-
-  if (MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)data, -1, base_dir, wstrLength) == 0)
-  {
-    MessageBox(hWnd, TEXT("Error converting byte array to wide-character string"), TEXT("Error"), MB_ICONERROR | MB_OK);
-    free(base_dir);
-    return 0;
-  }
+  const PWSTR base_dir = TEXT(APP_BASE_DIRECTORY);
 
   switch (msg)
   {
@@ -151,28 +90,6 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
           ShowAboutDialog(hWnd);
           return 0;
         }
-        case ID_FILE_BASEDIR:
-        {
-          regResult = RegOpenKeyEx(HKEY_CURRENT_USER, APP_CONFIG_SUBKEY,
-                                  0, KEY_READ | KEY_WRITE , &hKey);
-          if (regResult == ERROR_SUCCESS)
-          {
-            regResult = SetBaseDirectory(hKey, hWnd);
-            if (regResult != ERROR_SUCCESS)
-            {
-              MessageBox(hWnd, TEXT("Unable to update registry."), TEXT("Error"), MB_ICONERROR | MB_OK);
-              RegCloseKey(hKey);
-              return 0;
-            }
-          }
-          regResult = RegCloseKey(hKey);
-          if (regResult != ERROR_SUCCESS)
-          {
-            MessageBox(hWnd, TEXT("Unable to close registry."), TEXT("Error"), MB_ICONERROR | MB_OK);
-            return 0;
-          }
-          return 0;
-        }
         case ID_FILE_EXIT:
         {
           DestroyWindow(hWnd);
@@ -213,7 +130,6 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
     {
       PostQuitMessage(0);
-      free(base_dir);
       return 0;
     }
   }

@@ -2,6 +2,8 @@
 
 #include <windows.h>
 
+#define   APP_BASE_DIRECTORY  "\\CMITRAX";
+
 /* Global instance handle */
 extern HINSTANCE g_hInstance;
 
